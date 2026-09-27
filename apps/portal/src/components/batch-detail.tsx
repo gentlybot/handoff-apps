@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { BatchMap, type MapPickup } from "@/components/batch-map";
 import type { BatchDetail as BatchDetailData, Order } from "@/lib/api";
 import { STOP_PROBLEM, STOP_READY, routeColor } from "@/lib/colors";
-import { formatDate, formatDateTime } from "@/lib/format";
+import { formatDate, formatDateTime, formatMoney } from "@/lib/format";
 
 type Props = {
   batch: BatchDetailData;
@@ -161,6 +161,7 @@ export function BatchDetail({ batch, back, context, retry, problemHint, pickup, 
                   <TableHead>Recipient</TableHead>
                   <TableHead>Address</TableHead>
                   <TableHead className="text-right">Qty</TableHead>
+                  <TableHead className="text-right">Locked price</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
@@ -208,6 +209,9 @@ function OrderRow({ order }: { order: Order }) {
         </div>
       </TableCell>
       <TableCell className="text-right tabular-nums">{order.quantity}</TableCell>
+      <TableCell className="text-right tabular-nums">
+        {order.settled_price_cents === null ? <span className="text-muted-foreground">—</span> : formatMoney(order.settled_price_cents)}
+      </TableCell>
       <TableCell>
         {hasProblems ? (
           <ul className="space-y-0.5 text-sm text-[#9a5b00]">

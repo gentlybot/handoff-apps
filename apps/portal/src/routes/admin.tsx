@@ -17,6 +17,7 @@ function AdminLayout() {
       <PortalHeader context="Crosstown ops" home="/admin/batches" signInPath="/admin/login" nav={[
           { label: "Batches", to: "/admin/batches" },
           { label: "Routes", to: "/admin/routes" },
+          { label: "Pricing", to: "/admin/pricing" },
         ]} />
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         <Outlet />

@@ -20,6 +20,7 @@ import { Route as MerchantIndexRouteImport } from './routes/merchant/index'
 import { Route as MerchantLoginRouteImport } from './routes/merchant_.login'
 import { Route as AdminBatchesIndexRouteImport } from './routes/admin/batches/index'
 import { Route as AdminBatchesBatchIdRouteImport } from './routes/admin/batches/$batchId'
+import { Route as AdminPricingIndexRouteImport } from './routes/admin/pricing/index'
 import { Route as AdminRoutesIndexRouteImport } from './routes/admin/routes/index'
 import { Route as MerchantBatchesIndexRouteImport } from './routes/merchant/batches/index'
 import { Route as MerchantBatchesBatchIdRouteImport } from './routes/merchant/batches/$batchId'
@@ -80,6 +81,11 @@ const AdminBatchesBatchIdRoute = AdminBatchesBatchIdRouteImport.update({
   path: '/batches/$batchId',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPricingIndexRoute = AdminPricingIndexRouteImport.update({
+  id: '/pricing/',
+  path: '/pricing/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminRoutesIndexRoute = AdminRoutesIndexRouteImport.update({
   id: '/routes/',
   path: '/routes/',
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/merchant/batches/$batchId': typeof MerchantBatchesBatchIdRoute
   '/merchant/batches/new': typeof MerchantBatchesNewRoute
   '/admin/batches/': typeof AdminBatchesIndexRoute
+  '/admin/pricing/': typeof AdminPricingIndexRoute
   '/admin/routes/': typeof AdminRoutesIndexRoute
   '/merchant/batches/': typeof MerchantBatchesIndexRoute
 }
@@ -129,6 +136,7 @@ export interface FileRoutesByTo {
   '/merchant/batches/$batchId': typeof MerchantBatchesBatchIdRoute
   '/merchant/batches/new': typeof MerchantBatchesNewRoute
   '/admin/batches': typeof AdminBatchesIndexRoute
+  '/admin/pricing': typeof AdminPricingIndexRoute
   '/admin/routes': typeof AdminRoutesIndexRoute
   '/merchant/batches': typeof MerchantBatchesIndexRoute
 }
@@ -147,6 +155,7 @@ export interface FileRoutesById {
   '/merchant/batches/$batchId': typeof MerchantBatchesBatchIdRoute
   '/merchant/batches/new': typeof MerchantBatchesNewRoute
   '/admin/batches/': typeof AdminBatchesIndexRoute
+  '/admin/pricing/': typeof AdminPricingIndexRoute
   '/admin/routes/': typeof AdminRoutesIndexRoute
   '/merchant/batches/': typeof MerchantBatchesIndexRoute
 }
@@ -166,6 +175,7 @@ export interface FileRouteTypes {
     | '/merchant/batches/$batchId'
     | '/merchant/batches/new'
     | '/admin/batches/'
+    | '/admin/pricing/'
     | '/admin/routes/'
     | '/merchant/batches/'
   fileRoutesByTo: FileRoutesByTo
@@ -180,6 +190,7 @@ export interface FileRouteTypes {
     | '/merchant/batches/$batchId'
     | '/merchant/batches/new'
     | '/admin/batches'
+    | '/admin/pricing'
     | '/admin/routes'
     | '/merchant/batches'
   id:
@@ -197,6 +208,7 @@ export interface FileRouteTypes {
     | '/merchant/batches/$batchId'
     | '/merchant/batches/new'
     | '/admin/batches/'
+    | '/admin/pricing/'
     | '/admin/routes/'
     | '/merchant/batches/'
   fileRoutesById: FileRoutesById
@@ -289,6 +301,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBatchesBatchIdRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/pricing/': {
+      id: '/admin/pricing/'
+      path: '/pricing'
+      fullPath: '/admin/pricing/'
+      preLoaderRoute: typeof AdminPricingIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/routes/': {
       id: '/admin/routes/'
       path: '/routes'
@@ -324,6 +343,7 @@ interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminBatchesBatchIdRoute: typeof AdminBatchesBatchIdRoute
   AdminBatchesIndexRoute: typeof AdminBatchesIndexRoute
+  AdminPricingIndexRoute: typeof AdminPricingIndexRoute
   AdminRoutesIndexRoute: typeof AdminRoutesIndexRoute
 }
 
@@ -331,6 +351,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminBatchesBatchIdRoute: AdminBatchesBatchIdRoute,
   AdminBatchesIndexRoute: AdminBatchesIndexRoute,
+  AdminPricingIndexRoute: AdminPricingIndexRoute,
   AdminRoutesIndexRoute: AdminRoutesIndexRoute,
 }
 

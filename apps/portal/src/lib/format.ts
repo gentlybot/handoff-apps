@@ -1,4 +1,8 @@
 const dateFmt = new Intl.DateTimeFormat("en-CA", { weekday: "short", month: "short", day: "numeric" });
+
+export function formatMoney(cents: number) {
+  return new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" }).format(cents / 100);
+}
 const dateTimeFmt = new Intl.DateTimeFormat("en-CA", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
 
 /** "2026-09-09" is a calendar date, so build it locally to avoid a UTC day shift. */

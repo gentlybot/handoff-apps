@@ -8,6 +8,11 @@ export const deliveryAllowancesQuery = (userId: number) =>
     staleTime: 0,
   });
 
+export const adminPricingQuery = queryOptions({
+  queryKey: ["admin", "pricing"],
+  queryFn: api.admin.pricing,
+});
+
 export const batchesQuery = queryOptions({
   queryKey: ["batches"],
   queryFn: api.listBatches,

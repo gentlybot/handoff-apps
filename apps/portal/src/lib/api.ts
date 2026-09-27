@@ -71,7 +71,8 @@ export type Order = {
   notes: string | null;
   quantity: number;
   leave_at_door: boolean;
-  status: "pending" | "problem" | "ready" | "routed";
+  status: "pending" | "problem" | "ready" | "routed" | "delivered" | "failed";
+  settled_price_cents: number | null;
   problems: string[];
   lat: number | null;
   lng: number | null;
@@ -147,6 +148,15 @@ export type MerchantBrief = {
 };
 export type AdminBatch = Batch & { merchant: MerchantBrief };
 export type AdminBatchDetail = BatchDetail & { merchant: MerchantBrief };
+export type Pricing = {
+  default_per_stop_price_cents: number;
+  merchants: Array<{
+    id: number;
+    business_name: string;
+    per_stop_price_cents: number | null;
+    effective_per_stop_price_cents: number;
+  }>;
+};
 export type RouteDetail = RouteSummary & { merchant: MerchantBrief; stops: RouteStop[]; offers: RouteOffer[]; pay_breakdown: { label: string; cents: number }[] };
 
 export type RoutePlan = {
@@ -263,6 +273,12 @@ export const api = {
     return request<{ batch: BatchDetail }>(`/api/v1/merchant/batches/${id}`).then((r) => r.batch);
   },
   admin: {
+    pricing() {
+      return request<{ pricing: Pricing }>("/api/v1/admin/pricing").then((r) => r.pricing);
+    },
+    updatePricing(input: { default_per_stop_price_cents: number; merchant_prices: Array<{ merchant_id: number; per_stop_price_cents: number | null }> }) {
+      return request<{ pricing: Pricing }>("/api/v1/admin/pricing", { method: "PATCH", body: JSON.stringify(input) }).then((r) => r.pricing);
+    },
     listBatches(date: string) {
       return request<AdminBatchesResponse>(`/api/v1/admin/batches?date=${encodeURIComponent(date)}`);
     },
