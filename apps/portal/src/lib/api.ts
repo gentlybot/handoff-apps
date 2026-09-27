@@ -276,7 +276,7 @@ export const api = {
     pricing() {
       return request<{ pricing: Pricing }>("/api/v1/admin/pricing").then((r) => r.pricing);
     },
-    updatePricing(input: { default_per_stop_price_cents: number; merchant_prices: Array<{ merchant_id: number; per_stop_price_cents: number | null }> }) {
+    updatePricing(input: { default_per_stop_price_cents?: number; merchant_prices?: Array<{ merchant_id: number; per_stop_price_cents: number | null }> }) {
       return request<{ pricing: Pricing }>("/api/v1/admin/pricing", { method: "PATCH", body: JSON.stringify(input) }).then((r) => r.pricing);
     },
     listBatches(date: string) {

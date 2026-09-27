@@ -29,7 +29,7 @@ type Props = {
 
 export function BatchDetail({ batch, back, context, retry, problemHint, pickup, actions }: Props) {
   const [problemsOnly, setProblemsOnly] = useState(false);
-  const orders = problemsOnly ? batch.orders.filter((o) => o.problems) : batch.orders;
+  const orders = problemsOnly ? batch.orders.filter((o) => o.problems.length > 0) : batch.orders;
 
   const placed = batch.orders.filter((o) => o.lat !== null && o.lng !== null);
   const unplaced = batch.orders.length - placed.length;

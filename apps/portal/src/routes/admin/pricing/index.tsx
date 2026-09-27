@@ -21,18 +21,26 @@ function PricingPage() {
   const { data } = useSuspenseQuery(adminPricingQuery);
   const queryClient = useQueryClient();
   const [defaultPrice, setDefaultPrice] = useState(String(data.default_per_stop_price_cents));
+  const [defaultDirty, setDefaultDirty] = useState(false);
   const [prices, setPrices] = useState<Record<number, string>>({});
 
   const save = useMutation({
     mutationFn: () => api.admin.updatePricing({
-      default_per_stop_price_cents: Number(defaultPrice),
-      merchant_prices: data.merchants.map((merchant) => ({
-        merchant_id: merchant.id,
-        per_stop_price_cents: (prices[merchant.id] ?? merchant.per_stop_price_cents?.toString() ?? "") === "" ? null : Number(prices[merchant.id] ?? merchant.per_stop_price_cents),
-      })),
+      ...(defaultDirty ? { default_per_stop_price_cents: Number(defaultPrice) } : {}),
+      ...(Object.keys(prices).length > 0 ? {
+        merchant_prices: data.merchants
+          .filter((merchant) => merchant.id in prices)
+          .map((merchant) => ({
+            merchant_id: merchant.id,
+            per_stop_price_cents: prices[merchant.id] === "" ? null : Number(prices[merchant.id]),
+          })),
+      } : {}),
     }),
     onSuccess: (pricing) => {
       queryClient.setQueryData(adminPricingQuery.queryKey, pricing);
+      setDefaultPrice(String(pricing.default_per_stop_price_cents));
+      setDefaultDirty(false);
+      setPrices({});
       toast.success("Future stop prices saved");
     },
     onError: () => toast.error("Enter whole-cent prices greater than zero."),
@@ -49,7 +57,7 @@ function PricingPage() {
         <CardContent className="space-y-3 py-5">
           <Label htmlFor="default-price">Default future price (cents)</Label>
           <div className="flex max-w-sm items-center gap-3">
-            <Input id="default-price" type="number" min="1" step="1" value={defaultPrice} onChange={(event) => setDefaultPrice(event.target.value)} />
+            <Input id="default-price" type="number" min="1" step="1" value={defaultPrice} onChange={(event) => { setDefaultPrice(event.target.value); setDefaultDirty(true); }} />
             <span className="whitespace-nowrap text-sm text-muted-foreground">{Number(defaultPrice) > 0 && formatMoney(Number(defaultPrice))}</span>
           </div>
           <p className="text-sm text-muted-foreground">This applies to merchants without an override.</p>
@@ -75,7 +83,7 @@ function PricingPage() {
         </div>
       </Card>
 
-      <Button onClick={() => save.mutate()} disabled={save.isPending}>{save.isPending ? "Saving…" : "Save future prices"}</Button>
+      <Button onClick={() => save.mutate()} disabled={save.isPending || (!defaultDirty && Object.keys(prices).length === 0)}>{save.isPending ? "Saving…" : "Save future prices"}</Button>
     </div>
   );
 }
